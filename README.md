@@ -45,7 +45,7 @@ Evaluation: The Chatbot's response is good as it acknowledges the human's reques
 In the example above, we instruct Safety LLaMA model to apply these principles to assess **another** AI chatbot's response and flag it if it violates the safety guidelines above. There are several advantages to train a GPT model to perform the assessment and detection job: 
 1. **Flexibility**: Safety guidelines (aka AI principles) can be updated and configed to satisfy different end customer's needs
 2. **Few Train Labels**: Very few training labels are required to achieve solid performance since the base model is pre-trained based on an enormous amount of text data, which has decent zero-shot and few-shot prompting performance without fintuning.
-3. **Distillabtion Ability**: It is easy to distill the ability of safety assessment from a sophisicated GPT model (e.g. 75B-chat LLaMA2) to a much smaller model and achieve similar performance. 
+3. **Distillation Ability**: It is easy to distill the ability of safety assessment from a sophisicated GPT model (e.g. 75B-chat LLaMA2) and transfer it to a much smaller model and achieve similar performance. 
 
 # Finetuning
 
