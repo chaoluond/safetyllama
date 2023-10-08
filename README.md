@@ -26,4 +26,4 @@ Unsafe content includes, but is not limited to:
 - Illegal, immoral, or unethical content that does not align with human values.
 ```
 
-Basically, we train Safety LLaMA model to apply these principles to assess another AI chatbot's response. 
+Basically, we train Safety LLaMA model to apply these principles to assess another AI chatbot's response and flag it if it violates the safety guidelines above.
