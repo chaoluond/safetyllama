@@ -51,7 +51,7 @@ In the example above, we instruct Safety LLaMA model to apply these principles t
 The harmless [dataset](https://github.com/anthropics/hh-rlhf) from Anthropics is a list of sensitive questions (or prompts) asked by red teams, to which an AI chatbot is inclined to give inapproriate or dangerous answers. The dataset has about 15000 train prompts and 2200 test prompts. 
 
 ## Step 1. Generate Response to Harmless Dataset
-LLaMA-2-70B-chat model was used to generate responses to prompts in the harmless dataset (5000 train prompts and 2200 test prompts). This is done on a cloud server with 8xA100(80GB) GPUs. The total computation time is about 5-6 hours.
+LLaMA-2-70B-chat model was used to generate responses to prompts in the harmless dataset (5000 train prompts and 2200 test prompts). This step was done on a cloud server with 8xA100(80GB) GPUs. The total computation time is about 5-6 hours.
 
 ## Step 2. Generate Evaluation to Chatbot's Answer
 In step 1, we use LLaMA-2-70B-chat model to generate answers to prompts. In this step, we make the model to do **self critique**. Bascially, we use the same model to evaluate its answers according to the safety guileines. For all 5000 (prompt, answer) pairs from the train dataset, only 1 is flagged as unsafe. All 2200 (prompt, answer) pairs from the test dataset are evaluated as safe responses. 
@@ -59,4 +59,4 @@ In step 1, we use LLaMA-2-70B-chat model to generate answers to prompts. In this
 In order to cross validate the accuracy of LLaMA-2-70B-chat model's evaluation, ChatGPT 3.5 turbo was used to evaluate all (prompt, answer) pairs. It turns out that ChatGPT 3.5 is mostly aligned with LLaMA-2-70B-chat, which thinks all responses are safe. This also verifies that LLaMA-2-70B-chat is a pretty mature and safe model to use.
 
 ## Step 3. Finetune Small LLaMA-2 Model
-It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very expensive and time-consuming. In this step, we use the evaluations of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)).  
+It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very expensive and time-consuming. In this step, we use the evaluations of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)). The finetuning step was done on a single A40 GPU. The total computation time is about 2-3 hours.  
