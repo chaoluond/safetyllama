@@ -1,4 +1,5 @@
 # This script uses LLaMA to generate responses to questions of harmless dataset
+# Follow https://github.com/facebookresearch/llama to download the corresponding model and install dependencies
 
 from typing import Optional
 import fire
