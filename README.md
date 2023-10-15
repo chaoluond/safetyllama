@@ -45,10 +45,12 @@ Evaluation: The Chatbot's response is good as it acknowledges the human's reques
 In the example above, we instruct Safety LLaMA model to apply these principles to evaluate **another** AI chatbot's response and flag it if it violates the safety guidelines above. There are several advantages to train a GPT model to perform the evaluation and detection job: 
 1. **Flexibility**: Safety guidelines can be updated and configed to satisfy different end customer's needs
 2. **Few Train Labels**: Very few training labels are required to achieve solid performance since the base model is pre-trained based on an enormous amount of text data, which has decent zero-shot and few-shot prompting performance without fintuning.
-3. **Distillation Ability**: It is easy to distill the ability of safety evaluation from a sophisicated GPT model (e.g. 75B-chat LLaMA2) and transfer it to a much smaller model and achieve similar performance. 
+3. **Distillation Ability**: It is easy to distill the ability of safety evaluation from a sophisicated GPT model (e.g. 75B-chat LLaMA2) and transfer it to a much smaller model and achieve similar performance.
 
 # Finetuning
 The harmless [dataset](https://github.com/anthropics/hh-rlhf) from Anthropics is a list of sensitive questions (or prompts) asked by red teams, to which an AI chatbot is inclined to give inapproriate or dangerous answers. The dataset has about 15000 train prompts and 2200 test prompts. 
+
+![alt text](https://github.com/chaoluond/safetyllama/blob/main/images/finetune_flow.png)
 
 ## Step 1. Generate Response to Harmless Dataset
 LLaMA-2-70B-chat model was used to generate responses to prompts in the harmless dataset (5000 train prompts and 2200 test prompts). This step was done on a cloud server with 8xA100(80GB) GPUs. The total computation time is about 5-6 hours. See [llama_gen_response_to_prompt](https://github.com/chaoluond/safetyllama/blob/main/llama/llama_gen_response_to_prompt.py). 
