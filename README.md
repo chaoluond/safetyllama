@@ -9,7 +9,7 @@ To ensure the safety of AI chatbots, we introduce **Safety LLaMA** to monitor an
 # Methodology
 Generally, we follow the same framework in [Constitutional AI: Harmlessness from AI Feedback](https://browse.arxiv.org/pdf/2212.08073.pdf) to develop Safety LLaMA. The basic idea of Safety LLaMA to use an independent GPT model to monitor and evaluate the safety and integrity of an AI chatbot's response to a user's prompt. It serves as an alternative to OpenAI's [moderation endpoint tool](https://platform.openai.com/docs/guides/moderation/overview), which can only be used by OpenAI users.   
 
-As human beings, we provide Safety LLaMA with a set of **fundamental principles** that an AI chatbot must comply with, which is called **AI Constitution**. Here is an example showing how to prompt Safety LLaMA:
+As human beings, we provide Safety LLaMA with a set of **fundamental principles** that an AI chatbot must comply with, which is called **AI Constitution**. Here is an example showing how to prompt Safety LLaMA (see [prompt](https://github.com/chaoluond/safetyllama/tree/main/prompts) for scripts):
 
 ```
 To ensure the AI chatbots to promote safety and well-being, we have developed the following guidelines for unsafe content.
@@ -51,15 +51,17 @@ In the example above, we instruct Safety LLaMA model to apply these principles t
 The harmless [dataset](https://github.com/anthropics/hh-rlhf) from Anthropics is a list of sensitive questions (or prompts) asked by red teams, to which an AI chatbot is inclined to give inapproriate or dangerous answers. The dataset has about 15000 train prompts and 2200 test prompts. 
 
 ## Step 1. Generate Response to Harmless Dataset
-LLaMA-2-70B-chat model was used to generate responses to prompts in the harmless dataset (5000 train prompts and 2200 test prompts). This step was done on a cloud server with 8xA100(80GB) GPUs. The total computation time is about 5-6 hours.
+LLaMA-2-70B-chat model was used to generate responses to prompts in the harmless dataset (5000 train prompts and 2200 test prompts). This step was done on a cloud server with 8xA100(80GB) GPUs. The total computation time is about 5-6 hours. See [llama_gen_response_to_prompt](https://github.com/chaoluond/safetyllama/blob/main/llama/llama_gen_response_to_prompt.py). 
 
 ## Step 2. Generate Evaluation to Chatbot's Answer
-In step 1, we use LLaMA-2-70B-chat model to generate answers to prompts. In this step, we make the model to do **self critique**. Bascially, we use the same model to evaluate its answers according to the safety guileines. For all 5000 (prompt, answer) pairs from the train dataset, only 1 is flagged as unsafe. All 2200 (prompt, answer) pairs from the test dataset are evaluated as safe responses. 
+In step 1, we use LLaMA-2-70B-chat model to generate answers to prompts. In this step, we make the model to do **self critique**. Bascially, we use the same model to evaluate its answers according to the safety guileines. See [llama_gen_safety_evaluation](https://github.com/chaoluond/safetyllama/blob/main/llama/llama_gen_safety_evaluation.py). For all 5000 (prompt, answer) pairs from the train dataset, only 1 is flagged as unsafe. All 2200 (prompt, answer) pairs from the test dataset are evaluated as safe responses. 
 
-In order to cross validate the accuracy of LLaMA-2-70B-chat model's evaluation, ChatGPT 3.5 turbo was used to evaluate all (prompt, answer) pairs. It turns out that ChatGPT 3.5 is mostly aligned with LLaMA-2-70B-chat, which thinks all responses are safe. This also verifies that LLaMA-2-70B-chat is a pretty mature and safe model to use.
+In order to cross validate the accuracy of LLaMA-2-70B-chat model's evaluation, ChatGPT 3.5 turbo was used to evaluate all (prompt, answer) pairs. See [chatgpt_gen_safety_evaluation](https://github.com/chaoluond/safetyllama/blob/main/chatgpt/chatgpt_gen_safety_evaluation.py). It turns out that ChatGPT 3.5 is mostly aligned with LLaMA-2-70B-chat, which thinks all responses are safe. This also verifies that LLaMA-2-70B-chat is a pretty mature and safe model to use.
 
 ## Step 3. Finetune Small LLaMA-2 Model
-It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very costly and time-consuming. In this step, we use the evaluation dataset of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)). This finetuning step was done on a single A40 GPU and the total computation time is about 2-3 hours. We treat the evaluation decision from LLaMA-2-70B-chat and ChatGPT 3.5 as the correct decisions and use them to guage the performance of smaller models. The result is given in the table below: 
+It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very costly and time-consuming. In this step, we use the evaluation dataset of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)). This finetuning step was done on a single A40 GPU and the total computation time is about 2-3 hours. See [finetune](https://github.com/chaoluond/safetyllama/tree/main/finetune) for instructions and scripts. See [safetyllama_finetune_using_huggingface](https://github.com/chaoluond/safetyllama/blob/main/finetune/safetyllama_finetune_using_huggingface.py) for calling the finetuned model. 
+
+On the other hand, we treat the evaluation decision from LLaMA-2-70B-chat and ChatGPT 3.5 as the correct decisions and use them to guage the performance of smaller models. The result is given in the table below: 
 
 Result | Original llama2-7b-chat | Finetuned llama2-7b-chat
 --- | --- | ---
