@@ -1,0 +1,27 @@
+1. clone llama2-recipes github project
+git clone https://github.com/facebookresearch/llama-recipes.git
+
+2. install requirements in llama-recipes 
+pip install -r requirements.txt
+
+3. Install more requirements 
+pip install transformers datasets accelerate sentencepiece protobuf==3.20 py7zr scipy peft bitsandbytes fire torch_tb_profiler ipywidgets
+
+4. Upload datasets.py from to llama-recipes/src/llama_recipes/configs/
+
+5. Upload safetyllama_finetune_dataset.py from local to llama-recipes/src/llama_recipes/datasets/
+   Upload safetyllama_finetune_using_huggingface.py from local to llama-recipes/src/llama_recipes/
+
+6. Update llama_recipes/src/llama_recipes/datasets/__init__.py to include `from llama_recipes.datasets.safetyllama_finetune_dataset import SafetyEvaluationDataset as get_safetyllama_dataset`
+
+7. Register the dataset name and preprocessing function by inserting it as key and value into the DATASET_PREPROC dictionary in src/llama_recipes/utils/dataset_utils.py
+`get_safetyllama_dataset`
+"safetyllama_finetune_dataset": partial(get_safetyllama_dataset, max_words=2048)
+
+8. upload the training dataset from local to ~/llama-recipes/src/llama_recipes/datasets/
+
+9. Config huggingface token 
+git config --global credential.helper store
+huggingface-cli login
+
+
