@@ -59,4 +59,17 @@ In step 1, we use LLaMA-2-70B-chat model to generate answers to prompts. In this
 In order to cross validate the accuracy of LLaMA-2-70B-chat model's evaluation, ChatGPT 3.5 turbo was used to evaluate all (prompt, answer) pairs. It turns out that ChatGPT 3.5 is mostly aligned with LLaMA-2-70B-chat, which thinks all responses are safe. This also verifies that LLaMA-2-70B-chat is a pretty mature and safe model to use.
 
 ## Step 3. Finetune Small LLaMA-2 Model
-It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very expensive and time-consuming. In this step, we use the evaluations of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)). The finetuning step was done on a single A40 GPU. The total computation time is about 2-3 hours.  
+It requires 8xA100 GPUs to run LLaMA-2-70B-chat to generate safety evaluation, which is very costly and time-consuming. In this step, we use the evaluation dataset of LLaMA-2-70B-chat from step 2 to finetune a LLaMA-2-7B-chat model using int8 quantization and Low-Rank Adaptation ([LoRA](https://huggingface.co/docs/peft/conceptual_guides/lora)). This finetuning step was done on a single A40 GPU and the total computation time is about 2-3 hours. We treat the evaluation decision from LLaMA-2-70B-chat and ChatGPT 3.5 as the correct decisions and use them to guage the performance of smaller models. The result is given in the table below: 
+
+Result | Original llama2-7b-chat | Finetuned llama2-7b-chat
+--- | --- | ---
+No Decision | 276/(12.7%) | 0/(0%)
+Wrong Decision | 28/(1.3%) | 0/(0%)
+Correct Decision | 1866/(86%) | 2170/(100%)
+**Total** | 2170/(100%) | 2170/(100%)
+
+When asking the original LLaMA-2-7B-chat model to evaluate (prompt, answer) pairs from the test dataset, it shows a few undesired behaviors:
+1. **No Decision**: model dodges the question and refuses to give safety evaluation based on the given safety guidelines
+2. **Wrong Decision**: model gives wrong safety evaluations
+
+However, the fintuned LLaMA-2-7B-chat model does not have these problems and its evaluations are aligned with LLaMA-2-70B-chat and ChatGPT 3.5. This demonstrates that a small LLaMA model can achieve similar performance on specific tasks as the large models with very low-cost finetuning.    
