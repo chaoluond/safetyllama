@@ -1,4 +1,4 @@
-[logo]: https://en.wikipedia.org/wiki/Guard_llama#/media/File:Guard_llama_and_flock-enhanced.jpg "Logo Title Text 2"
+![alt text](https://github.com/chaoluond/safetyllama/blob/main/images/Guard_llama_and_flock-enhanced.jpg)
 # Introduction
 The recent advance in Generative Pre-trained Transformer (GPT) technology (e.g. ChatGPT, LLaMA, Claude, Dolly, etc.) has been inspiring numerious tech companies and AI enthusiasts to utilize it to expore, experiment and deploy novel applications in search engine, recommendation system, work productivity tools, healthcare, advertising, and so on. 
 
