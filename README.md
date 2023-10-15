@@ -72,7 +72,7 @@ Wrong Decision | 28/(1.3%) | 0/(0%)
 Correct Decision | 1866/(86%) | 2170/(100%)
 **Total** | 2170/(100%) | 2170/(100%)
 
-When asking the original LLaMA-2-7B-chat model to evaluate (prompt, answer) pairs from the test dataset, it shows a few undesired behaviors:
+When asked to evaluate (prompt, answer) pairs from the test dataset, the original LLaMA-2-7B-chat model shows a few undesired behaviors:
 1. **No Decision**: model dodges the question and refuses to give safety evaluation based on the given safety guidelines
 2. **Wrong Decision**: model gives wrong safety evaluations
 
