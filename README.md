@@ -7,7 +7,7 @@ GPT, or more broadly AI, is a double-edged sword. On one hand, it can tremendous
 To ensure the safety of AI chatbots, we introduce **Safety LLaMA** to monitor and detect unsafe responses from AI chatbots. Safety LLaMA is a 7B-chat LLaMA2 model, which was finetuned using the red team harmless dataset from Anthropics ([link](https://github.com/anthropics/hh-rlhf))  
 
 # Methodology
-Generally, we follow the same framework in [Constitutional AI: Harmlessness from AI Feedback](https://browse.arxiv.org/pdf/2212.08073.pdf) to develop Safety LLaMA. The basic idea of Safety LLaMA to use an independent GPT model to monitor and evaluate the safety and integrity of an AI chatbot's response to a user's prompt. It serves as an alternative to OpenAI's [moderation endpoint tool](https://platform.openai.com/docs/guides/moderation/overview), which can only be used by OpenAI users.   
+Generally, we follow the same framework in [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) to develop Safety LLaMA. The basic idea of Safety LLaMA to use an independent GPT model to monitor and evaluate the safety and integrity of an AI chatbot's response to a user's prompt. It serves as an alternative to OpenAI's [moderation endpoint tool](https://platform.openai.com/docs/guides/moderation/overview), which can only be used by OpenAI users.   
 
 As human beings, we provide Safety LLaMA with a set of **fundamental principles** that an AI chatbot must comply with, which is called **AI Constitution**. Here is an example showing how to prompt Safety LLaMA (see [prompt](https://github.com/chaoluond/safetyllama/tree/main/prompts) for scripts):
 
